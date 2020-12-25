@@ -48,8 +48,6 @@ def api_get_updates():
 
     response = requests.request("GET", url, headers=headers, data=payload)
 
-    print(response.text.encode('utf8'))
-
     response = json.loads(response.text)
     result = response['result'][-1]
 
@@ -68,7 +66,6 @@ def api_get_updates():
             "is_bot": result['message']['reply_to_message']['from']['is_bot']
         }
     except:
-        print(result)
         return None
 
 
@@ -83,8 +80,6 @@ def api_get_file(file_id):
     headers = {}
 
     response = requests.request("GET", url, headers=headers, data=payload)
-
-    print(response.text.encode('utf8'))
 
     try:
         response = json.loads(response.text)
@@ -113,8 +108,6 @@ def api_get_image(file_id):
 
     response = requests.request("GET", url, headers=headers, data=payload)
 
-    print(response.text.encode('utf8'))
-
     return BytesIO(response.content)
 
 
@@ -127,9 +120,7 @@ def api_send_board(chat_id, file_object):
     ]
     headers = {}
 
-    response = requests.request("GET", url, headers=headers, data=payload, files=files)
-
-    print(response.text.encode('utf8'))
+    requests.request("GET", url, headers=headers, data=payload, files=files)
 
 
 def api_update_board(chat_id, message_id, file_object):
@@ -141,9 +132,7 @@ def api_update_board(chat_id, message_id, file_object):
     ]
     headers = {}
 
-    response = requests.request("GET", url, headers=headers, data=payload, files=files)
-
-    print(response.text.encode('utf8'))
+    requests.request("GET", url, headers=headers, data=payload, files=files)
 
 
 def render(state):
@@ -304,8 +293,9 @@ def lambda_handler():
     update = api_get_updates()
     if update is None:
         return
-    elif '/game' in update:
-        new_game(update['chat_id'])
+    elif 'command' in update:
+        if update['command'] == '/game':
+            new_game(update['chat_id'])
         return
     elif not update['is_bot']:
         return
