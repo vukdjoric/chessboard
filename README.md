@@ -1,1 +1,1 @@
-# chessboard-emulator
+play chess on a static image
