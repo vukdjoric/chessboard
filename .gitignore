@@ -130,3 +130,7 @@ dmypy.json
 
 # PyCharm
 .idea/
+
+.DS_Store
+.aws-sam/
+*.toml

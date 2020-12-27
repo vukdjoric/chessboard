@@ -7,23 +7,6 @@ import os
 TOKEN = os.environ['TOKEN']
 
 
-def parse(result):
-    try:
-        if result['message']['text'].startswith('/'):
-            return {
-                "command": result['message']['text'].split('@')[0],
-                "chat_id": result['message']['chat']['id']
-            }
-        return {
-            "move": result['message']['text'],
-            "message_id": result['message']['reply_to_message']['message_id'],
-            "file_id": result['message']['reply_to_message']['photo'][-1]['file_id'],
-            "chat_id": result['message']['chat']['id']
-        }
-    except:
-        return {}
-
-
 def get_updates():
     """
     :return: <class 'dict'>
@@ -57,11 +40,11 @@ def get_file(file_id):
         result = response['result']
         file_path = result['file_path']
         return file_path
-    except:
+    except (ValueError, LookupError):
         return None
 
 
-def get_image(file_id):
+def download_file(file_id):
     """
     :param file_id: <class 'str'>
     :param file_path: <class 'str'>
@@ -81,7 +64,7 @@ def get_image(file_id):
     return BytesIO(response.content)
 
 
-def send_board(chat_id, file_object):
+def send_file(chat_id, file_object):
     url = f'https://api.telegram.org/bot{TOKEN}/sendPhoto?chat_id={chat_id}'
 
     payload = {}
@@ -93,7 +76,7 @@ def send_board(chat_id, file_object):
     requests.request("GET", url, headers=headers, data=payload, files=files)
 
 
-def update_board(chat_id, message_id, file_object):
+def edit_file(chat_id, message_id, file_object):
     url = f'https://api.telegram.org/bot{TOKEN}/editMessageMedia?chat_id={chat_id}&message_id={message_id}&media={{"type": "photo", "media": "attach://media"}}'
 
     payload = {}

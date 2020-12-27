@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+
+Resources:
+  ChessboardFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: chessboard/
+      Handler: chessboard.lambda_handler
+      Runtime: python3.8
+      Events:
+        Chessboard:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: post
