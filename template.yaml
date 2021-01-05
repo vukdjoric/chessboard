@@ -15,3 +15,8 @@ Resources:
           Properties:
             Path: /
             Method: post
+      Environment:
+        Variables:
+          TOKEN: ""
+      MemorySize: 2024
+      Timeout: 10
